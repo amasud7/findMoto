@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import scrape
 
 load_dotenv()
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")
@@ -18,7 +19,7 @@ def get_database():
     response = requests.get(url, headers=HEADERS)
     return response.json()
 
-print(get_database())
+# print(get_database())
 
 
 def query_database():
@@ -33,14 +34,27 @@ def add_entry(data):
     payload = {
         "parent": {"database_id": DATABASE_ID},
         "properties": {
-            "Name": {
-                "title": [{"text": {"content": data["Name"]}}]
-            },
+            # "cover": {
+            #     "type": "file",
+            #     "file": [ {"name": "image", "type": "external", "external": {"url": data["Image"]}} ]
+            # },
             "Price": {
                 "number": data["Price"]
             },
+            "Name": {
+                "title": [{"text": {"content": data["Name"]}}]
+            },
             "Location": {
                 "rich_text": [{"text": {"content": data["Location"]}}]
+            },
+            "Mileage": {
+                "number": data["Mileage"]
+            },
+            "Image": {
+                "files": [ {"name": "image", "type": "external", "external": {"url": data["Image"]}} ]
+            },
+            "Link": {
+                "url": data["Link"]
             }
         }
     }
@@ -50,23 +64,20 @@ def add_entry(data):
 
 
 
-data = [{
-        "Name": "Ninja Kawasaki 400",
-        "Price": 5000,
-        "Location": "Dallas"
-    },
-    {
-        "Name": "Suzuki Hayabusa",
-        "Price": 15000,
-        "Location": "Austin"
-    },
-    {
-        "Name": "Yamaha R1",
-        "Price": 12000,
-        "Location": "Houston"
-    }
-]
+# data = [ {
+#     "Price": 5000,
+#     "Name": "2023 Harley Davidson",
+#     "Location": "Dallas, TX",
+#     "Mileage": 2000,
+#     "Image": "https://scontent.fftw1-1.fna.fbcdn.net/v/t39.30808-6/486700650_10237644108188379_8841458980709029598_n.jpg?stp=c256.0.1537.1537a_dst-jpg_s600x600_tt6&_nc_cat=100&ccb=1-7&_nc_sid=454cf4&_nc_ohc=hO7Nr4tmcJsQ7kNvgE745Mm&_nc_oc=Adm2fw-Fi46dN7bDw84hGm3-rwZAAYFYY2h3bryyUXpMopuFjwjGrt3ikWPx8TFStUA&_nc_zt=23&_nc_ht=scontent.fftw1-1.fna&_nc_gid=K7-hIvZ7p1zWC9qS65_J-A&oh=00_AYHJw_quenWpXpeTG8uJ_dYQI2zBzQI_Vn-zG6XylpAvMg&oe=67EE02A9",
+#     "Link": "https://www.google.com"
+#     }
+# ]
 
-for entry in data:
-    add_entry(entry)
+data = scrape.build_url()
+listings = scrape.get_listings(data)
+
+for listBody in listings:
+    for item in listBody:
+        add_entry(item)
 
