@@ -46,9 +46,10 @@ As motorcycle enthusiasts, we found ourselves spending too much time manually br
    ```bash
    crontab -e
    ```
-   Add the following line to run the script every 4 hours:
+   Add the following lines to run the script every 4 hours starting at 8am with logging:
    ```bash
-   0 */4 * * * /usr/bin/python3 /path/to/findmoto.py
+   # Run the script every minute and log output for debugging
+   0 8,12,16,20 * * * /bin/zsh /path/to/findMoto/script.sh >> /path/to/findMoto/cron.log 2>&1
    ```
 
 ## Challenges Faced
