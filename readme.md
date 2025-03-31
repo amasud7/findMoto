@@ -29,11 +29,17 @@ As motorcycle enthusiasts, we found ourselves spending too much time manually br
    git clone https://github.com/yourusername/FindMoto.git
    cd FindMoto
    ```
+2. Create and activate your python virtual-environment for findMoto.
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip3 install -r requirements.txt
    ```
 3. Set up Notion API:
+   - Setup a new database for findMoto.
    - Create a Notion integration and obtain an API key.
    - Share your Notion database with the integration.
 4. Configure cron job for automation:
@@ -46,8 +52,7 @@ As motorcycle enthusiasts, we found ourselves spending too much time manually br
    ```
 
 ## Challenges Faced
-- **Web Scraping Complexity:** This was our first web scraping project, requiring deep inspection of Facebook Marketplace’s HTML structure.
-- **Facebook Marketplace API Deprecation:** With no official API, we had to manually extract data.
+- **Facebook Marketplace API Deprecation:** With no official API, we had to manually extract listing data by getting deep into the HTML.
 - **Notion API Learning Curve:** Integrating with Notion was new to us, requiring adjustments to format and structure the data correctly.
 - **Cron Job Setup:** Automating the script execution proved tedious but was successfully implemented.
 
