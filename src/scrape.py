@@ -1,6 +1,7 @@
 # Import Dependencies
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import re
 
 def build_url(loc):
     # Setup Search Parameters
@@ -25,6 +26,16 @@ def chrome_driver():
     return webdriver.Chrome(options=chrome_options)
 
 
+def extract_mileage(text):
+    match = re.search(r'(\d+(\.\d+)?)K?', text)  # Capture numbers and optional decimal + 'K'
+    if match:
+        num = float(match.group(1))  # Extract matched number
+        if 'K' in text:
+            return int(num * 1000)  # Convert 'K' to full numerical value
+        return int(num)
+    return None  # Return None for outliers
+
+
 def get_listings(search_url):
     # Initialize Driver
     driver = chrome_driver()
@@ -47,23 +58,12 @@ def get_listings(search_url):
         if len(text) > 4:
             text.pop(1)
 
-        # Convert mileage to number
-        milg = text[3]
-        if "K" in milg:
-            # Remove the 'K' and 'miles', then convert to float
-            cleaned_distance = milg.replace("K", "").replace(" miles", "").strip()
-            # Convert to float and multiply by 1000 to handle 'K'
-            milg = int(float(cleaned_distance) * 1000)
-        else:
-            # If there's no 'K', just extract the numeric part
-            cleaned_distance = milg.replace(" miles", "").strip()
-            milg = int(float(cleaned_distance))
 
         data = {
             "Price": int(text[0].replace("$", "").replace(",", "")),
             "Name": text[1],
             "Location": text[2],
-            "Mileage": milg,
+            "Mileage": extract_mileage(text[3]),
             "Image": img_src,
             "Link": link
             }
