@@ -1,4 +1,3 @@
-# Import Dependencies
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import re
@@ -6,10 +5,10 @@ import re
 def build_url(loc):
     # Setup Search Parameters
     location = loc + '/'
-    min_price = 400
-    max_price = 5000
+    min_price = 1000
+    max_price = 6000
     max_mileage = 5000
-    min_year = 2010
+    min_year = 2015
 
     url = f'https://www.facebook.com/marketplace/{location}vehicles?minPrice={min_price}&maxPrice={max_price}&maxMileage={max_mileage}&minYear={min_year}&sortBy=creation_time_descend&topLevelVehicleType=motorcycle&exact=false'
 
